@@ -1,6 +1,6 @@
 <!DOCTYPE html>
  <!-- Marylia Nieves MIU 1211  
- 	Assignment 1 Add Item Page. -->
+ 	Assignment 3 Add Item Page. -->
  	
 <!-- HTML Tag-->
 <html>
@@ -36,9 +36,8 @@
 							<li><input	name="weekday" type="radio" value="Friday" id="friday"/><label for="friday">Friday</label></li>
 						</ul>
 					</li>
-					<li><label for="sub">Subject: </label><input type="text" id="sub"/></li>
-					<li><label for="period">Period: </label><input type="text" id="period" />	
-					</li>
+						<li><label for="sub">* Subject:</label><input type="text" required="required" id="sub"/></li>
+						<li><label for="period">* Period:</label><input type="text" required="required" id="period"/></li>
 					<li>
 						Grade Level:<input type="range" name="range1" min="1" max="12" step="1" value="0" id="grade"/>
 					</li>					
@@ -59,8 +58,9 @@
 						<label for="dueDate">Due Date: </label><input type="date" id="dueDate" name="Due Date" />	
 					</li>
 					<li>
-						<label for="comments"> My Notes: </label><textarea id="comments">Type notes here.</textarea>
+						<label for="comments">My Notes:</label><textarea id="comments">Type notes here.</textarea>
 					</li>
+					<br><i>'*' fields are required.</i>
 			</fieldset>
 			<input type="button" id="taskSubmit" value="Submit my task!"/>	
 		</form>

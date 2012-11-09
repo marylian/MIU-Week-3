@@ -3,16 +3,27 @@
 //Assignment 4
 
 //Wait until the DOM is ready
-window.addEventListener("DOMContentLoaded", function(){
-	//alert(localStorage.value(0));	
+/*
+
+	//code needed for home page goes here
+});
+*/
+
+
+$('#additem').on('pageinit', function(){
+		var myForm = $('#taskForm');
+			myForm.validate();
+
+});
+
 
 	//getElementById Function
-	 function ge(x){
+	 var id=function(x){
 	 	var theElement=document.getElementById(x);
 	 	return theElement;
-	 }
+	 };
 	//Create select field elements and populate with options.
-
+	
 	function makeCats(){
 		 var formTag=document.getElementsByTagName("form");
 		 selectLi=ge('categories');
@@ -37,36 +48,32 @@ window.addEventListener("DOMContentLoaded", function(){
 				dayValue=radiobutton[i].value;
 			}
 		}
-		/*var checkbox=document.forms[0].weekday;
-		for(var i=0; i<checkbox.length; i++){
-			if(checkbox[i].checked){
-			dayValue.push(checkbox[i].value);
-			}
-		}*/
-	}
-var x=document.getElementsByName("x");
-//alert(x.length);
-	function toggleControls(m){
+ 	}
+ 	
+	var x=document.getElementsByName("x");
+	
+	var toggleControls=function(m){
 		switch(m){
 			case "on":
-				ge('taskForm').style.display="none";
-				ge('clearTask').style.display="inline";
-				ge('displayTask').style.display="none";
-				ge('addTask').style.display="inline";
+				$("#taskForm").style.display=("none");
+				$("#clearTask").style.display=("inline");
+				$("#displayTask").style.display=("none");
+				$("#addTask").style.display=("inline");
 				break;
 			case "off":
-				ge('taskForm').style.display="block";
-				ge('clearTask').style.display="inline";
-				ge('displayTask').style.display="inline";
-				ge('addTask').style.display="none";
-				ge('cats').style.display="none";
+				$("#taskForm").style.display=("block");
+				$("#clearTask").style.display=("inline");
+				$("#displayTask").style.display=("inline");
+				$("#addTask").style.display=("none");
+				$("#cats").style.display=("none");
 				break;
 			default:
 				return false;
 		}
-	}
-	
-	function storeData(key){
+	};
+
+
+	var storeData=function(key){
 		//If there is no key this means this is a brand new item an we need a new key
 		if(!key){
 		var id=Math.floor(Math.random()*100000001);
@@ -81,28 +88,28 @@ var x=document.getElementsByName("x");
 		deleteDuplicateRec(key);
 		getSelectedCheckbox();
 		var item				={};
-			item.checkbox     	=["Choose a day:", dayValue];
-			item.sub			=["Subject:", ge('sub').value];
-			item.period			=["Period:", ge('period').value];
-			item.grade			=["Grade Level:", ge('grade').value];
-			item.category		=["Categories:", ge('category').value];
-			item.date			=["Due Date:", ge('dueDate').value];
-			item.comments		=["My Notes:", ge('comments').value];
+			item.checkbox     	=["Choose a day:", $("#dayValue").val()];
+			item.sub			=["Subject:", $("sub").value()];
+			item.period			=["Period:", $("period").value()];
+			item.grade			=["Grade Level:", $("grade").value()];
+			item.category		=["Categories:", $("category").value()];
+			item.date			=["Due Date:", $("dueDate").value()];
+			item.comments		=["My Notes:", $("comments").value()];
 		//Save data into Local Storage: Use Stringify to convert our object to a string.
 		localStorage.setItem(id, JSON.stringify(item));
 		alert("Task Saved!");
-}
+};
 
-function getImage(catName, makeSubList){
+var getImage=function(catName, makeSubList){
 		var imageLi=document.createElement('li');
 		makeSubList.appendChild(imageLi);
 		var newImg=document.createElement('img');
 		var setSrc=newImg.setAttribute("src", "images/"+catName+".png");
 		imageLi.appendChild(newImg);
-	}
+};
 
 
-function getData(){
+var getData=function(){
 	toggleControls("on");
 	if(localStorage.length===0){
 		alert("There is no task to display in Local Storage so default data was added.");
@@ -116,7 +123,8 @@ function getData(){
 		makeDiv.setAttribute("id", "cats");
 		var makeList=document.createElement('ul');
 		makeDiv.appendChild(makeList);
-		document.body.appendChild(makeDiv);
+		//document.body.appendChild(makeDiv);
+		$("#showData").append(makeDiv)
 		ge('cats').style.display="block";
 		for(var i=0, len=localStorage.length; i<len; i++){ 
 			var makeli=document.createElement('li');
@@ -138,10 +146,10 @@ function getData(){
 			}
 			makeItemLinks(localStorage.key(i), linksLi);  //Create our edit and delete links for each item in local storage
 		}
-	}
+};
 	
 	//Auto populate Local Storage
-	function autoFillData(){
+	var autoFillData=function(){
 		// The actually JSON Object data required for this to work is coming from our json.js file
 		//which is loaded from our HTML page.
 		//Store the JSON object into Local Storage.
@@ -149,11 +157,12 @@ function getData(){
 			var id=Math.floor(Math.random()*100000001);
 			localStorage.setItem(id, JSON.stringify(json[n]));
 		}		
-	}
+	};
 
 	//Create the edit and delete links for each item.
-	function makeItemLinks(key, linksLi){
-		var editLink=document.createElement('a');
+	var makeItemLinks=function(key, linksLi){
+		//var editLink=document.createElement('a');
+		var editLink=document.createElement('button');
 		editLink.href='#';
 		editLink.key=key;
 		var editText="Edit task";
@@ -162,16 +171,17 @@ function getData(){
 		linksLi.appendChild(editLink);
 		var lineBreak=document.createElement('br');
 		linksLi.appendChild(lineBreak);
-		var deleteLink=document.createElement('a');
+		//var deleteLink=document.createElement('a');
+		var deleteLink=document.createElement('button');
 		deleteLink.href="#";
 		deleteLink.key=key;
 		var deleteText="Delete task";
 		deleteLink.addEventListener("click", deleteItem);
 		deleteLink.innerHTML=deleteText;
 		linksLi.appendChild(deleteLink);
-	}
+	};
 	
-	function editItem(){
+	var editItem=function(){
 		//Grab the data from our item from Local Storage.
 		var value=localStorage.getItem(this.key);
 		var item=JSON.parse(value);
@@ -184,35 +194,30 @@ function getData(){
 				checkbox[i].setAttribute("checked", "checked");
 			}
 		}
-		ge('sub').value=item.sub [1];
-		ge('period').value=item.period [1];
-		ge('grade').value=item.grade[1];
-		ge('category').value=item.category [1];
-		ge('dueDate').value=item.date [1];
-		ge('comments').value=item.comments [1];
+		$("#sub").val(item.sub [1]);
+		$("#period").val(item.period [1]);
+		$("#grade").val(item.grade[1]);
+		$("#category").val(item.category [1]);
+		$("#dueDate").val(item.date [1]);
+		$("#comments").val(item.comments [1]);
 
 		//Remove the inital listener from the input 'save contact' button.
 		save.removeEventListener("click", storeData);
 		//Change Submit Button Value to Edit Button
-		ge('taskSubmit').value="Edit Task";
-		var editSubmit=ge('taskSubmit');
+		$("#taskSubmit").value="Edit Task";
+		var editSubmit=$("#taskSubmit");
 		//Save the key value established in this function as a property of the editSubmit event
 		//so we can use that value when we save the data we edited.
 		editSubmit.addEventListener("click", validate);
 		editSubmit.key=this.key;
-	}
+	};
 	
-	function deleteDuplicateRec(){
-		//var ask=confirm("Are you sure you want to delete this task?");
-		//if(ask){
+	var deleteDuplicateRec=function(){
 			localStorage.removeItem(this.key);
-			//alert("Contact was deleted!");
 			window.location.reload();
-		//}else{
-			//alert("Task was NOT deleted.");
-		//}
-	}
-	function deleteItem(){
+	};
+	
+	var deleteItem=function(){
 		var ask=confirm("Are you sure you want to delete this task?");
 		if(ask){
 			localStorage.removeItem(this.key);
@@ -221,10 +226,10 @@ function getData(){
 		}else{
 			alert("Task was NOT deleted.");
 		}
-	}
+	};
 
 
-	function clearLocal(){
+	var clearLocal=function(){
 		if(localStorage.length===0){
 			alert("There is no task to clear.");
 		}
@@ -234,7 +239,9 @@ function getData(){
 			window.location.reload();
 			return false;
 		}
-	}
+	};
+	
+	
 	function validate(e){
 		//Define the elements we want to check
 		var getSub=ge('sub');
@@ -294,15 +301,14 @@ function getData(){
 	makeCats();
 
 	//Set Link and Submit Click Events 
-	var displayTask=ge('displayTask'); 
+	var displayTask=$("#displayTask"); 
 	displayTask.addEventListener("click", getData); 
-	var clearLink=ge('clearTask');
+	var clearLink=$("#clearTask");
 	clearLink.addEventListener("click", clearLocal);
-	var save=ge('taskSubmit');
-	save.addEventListener("click",validate);
-});
+	var save=$("#taskSubmit");
+	save.addEventListener("click", validate);
+//});
 
-$(document).ready(function(){
-	var tForm=$('#taskForm');
-	tForm.validate();
-});
+	$("#displayTask").on("click", getData);
+	$("#clearTask").on("click", clearLocal);
+	$("#taskSubmit").on("click", storeData);
